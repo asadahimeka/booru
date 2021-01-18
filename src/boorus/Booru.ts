@@ -79,19 +79,32 @@ export class Booru {
    * @param {SearchParameters} searchArgs The arguments for the search
    * @return {Promise<SearchResults>} The results as an array of Posts
    */
-  public async search(tags: string | string[], {
-    limit = 1, random = false,
-    page = 0, showUnavailable = false } : SearchParameters = {}): Promise<SearchResults> {
-
+  public async search(
+    tags: string | string[],
+    {
+      limit = 1,
+      random = false,
+      page = 0,
+      showUnavailable = false,
+    }: SearchParameters = {},
+  ): Promise<SearchResults> {
     const fakeLimit: number = random && !this.site.random ? 100 : 0
 
     try {
-      const searchResult = await this.doSearchRequest(tags,
-        { limit, random, page, showUnavailable }
-      )
-      return this.parseSearchResult(searchResult,
-        { fakeLimit, tags, limit, random, page, showUnavailable }
-      )
+      const searchResult = await this.doSearchRequest(tags, {
+        limit,
+        random,
+        page,
+        showUnavailable,
+      })
+      return this.parseSearchResult(searchResult, {
+        fakeLimit,
+        tags,
+        limit,
+        random,
+        page,
+        showUnavailable,
+      })
     } catch (err) {
       throw new BooruError(err)
     }
@@ -108,7 +121,9 @@ export class Booru {
       throw new BooruError(`Not a valid id for postView: ${id}`)
     }
 
-    return `http${this.site.insecure ? '' : 's'}://${this.domain}${this.site.api.postView}${id}`
+    return `http${this.site.insecure ? '' : 's'}://${this.domain}${
+      this.site.api.postView
+    }${id}`
   }
 
   /**
@@ -119,9 +134,15 @@ export class Booru {
    * @param {InternalSearchParameters} searchArgs The arguments for the search
    * @return {Promise<Object>}
    */
-  protected async doSearchRequest(tags: string[] | string, {
-    uri = null, limit = 1, random = false, page = 0,
-  } : InternalSearchParameters = {}): Promise<any> {
+  protected async doSearchRequest(
+    tags: string[] | string,
+    {
+      uri = null,
+      limit = 1,
+      random = false,
+      page = 0,
+    }: InternalSearchParameters = {},
+  ): Promise<any> {
     if (!Array.isArray(tags)) tags = [tags]
 
     // Used for random on sites without order:random
@@ -136,7 +157,7 @@ export class Booru {
     }
 
     if (this.site.defaultTags) {
-      tags = tags.concat(this.site.defaultTags.filter(v => !tags.includes(v)))
+      tags = tags.concat(this.site.defaultTags.filter((v) => !tags.includes(v)))
     }
 
     const fetchuri = uri || searchURI(this.site, tags, fakeLimit || limit, page)
@@ -151,24 +172,26 @@ export class Booru {
         const body = await response.clone().text()
         if (body.includes('cf-browser-verification')) {
           throw new BooruError(
-            'Received a CloudFlare browser verification request. Can\'t proceed.'
+            "Received a CloudFlare browser verification request. Can't proceed.",
           )
         }
       }
 
       const data: Response = xml ? await response.text() : await response.json()
-      const posts = xml ? await jsonfy(data as unknown as string) : data
+      const posts = xml ? await jsonfy((data as unknown) as string) : data
 
       if (!response.ok) {
-        throw new BooruError(`Received HTTP ${response.status} `
-                            + `from booru: '${
-                              (posts as any).error ||
-                              (posts as any).message ||
-                              JSON.stringify(posts)}'`)
+        throw new BooruError(
+          `Received HTTP ${response.status} ` +
+            `from booru: '${
+              (posts as any).error ||
+              (posts as any).message ||
+              JSON.stringify(posts)
+            }'`,
+        )
       } else {
         return posts
       }
-
     } catch (err) {
       if ((err as FetchError).type === 'invalid-json') return ''
       throw err
@@ -183,10 +206,17 @@ export class Booru {
    * @param {InternalSearchParameters} searchArgs The arguments used for the search
    * @return {SearchResults} The results of this search
    */
-  protected parseSearchResult(result: any, {
-    fakeLimit, tags, limit, random, page, showUnavailable,
-  } : InternalSearchParameters) {
-
+  protected parseSearchResult(
+    result: any,
+    {
+      fakeLimit,
+      tags,
+      limit,
+      random,
+      page,
+      showUnavailable,
+    }: InternalSearchParameters,
+  ) {
     if (result.success === false) {
       throw new BooruError(result.message || result.reason)
     }
@@ -205,12 +235,15 @@ export class Booru {
       r = []
     } else if (fakeLimit) {
       r = shuffle(result)
-    } else if (result.constructor === Object) { // For XML based sites
+    } else if (result.constructor === Object) {
+      // For XML based sites
       r = [result]
     }
 
     const results = r || result
-    let posts: Post[] = results.slice(0, limit).map((v: any) => new Post(v, this))
+    let posts: Post[] = results
+      .slice(0, limit)
+      .map((v: any) => new Post(v, this))
     const options = { limit, random, page, showUnavailable }
 
     if (tags === undefined) {
@@ -222,7 +255,7 @@ export class Booru {
     }
 
     if (!showUnavailable) {
-      posts = posts.filter(p => p.available)
+      posts = posts.filter((p) => p.available)
     }
 
     return new SearchResults(posts, tags, options, this)

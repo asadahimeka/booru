@@ -1,0 +1,20 @@
+# Filter IDE settings
+.vs/*
+.vscode/
+.idea/
+
+# no need to lint
+.*
+example.js
+
+# Filter node modules
+node_modules/*
+
+# Filter build
+dist/*
+
+# Only publish one type of lockfile
+yarn.lock
+
+# For those pesky MacOS users
+.DS_Store

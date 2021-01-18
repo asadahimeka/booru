@@ -8,19 +8,14 @@ import siteJson from './sites.json'
 import Site from './structures/Site'
 import SiteInfo from './structures/SiteInfo'
 
-export interface SMap<V> {
-  [key: string]: V
+type GelTags = {
+  [key: string]: string
+  'rating:e': 'rating:explicit'
+  'rating:q': 'rating:questionable'
+  'rating:s': 'rating:safe'
 }
 
-type gelTags = {
-  'rating:e': 'rating:explicit',
-  'rating:q': 'rating:questionable',
-  'rating:s': 'rating:safe',
-
-  [key: string]: string;
-}
-
-const expandedTags: gelTags = {
+const expandedTags: GelTags = {
   'rating:e': 'rating:explicit',
   'rating:q': 'rating:questionable',
   'rating:s': 'rating:safe',
@@ -29,19 +24,21 @@ const expandedTags: gelTags = {
 /**
  * A map of site url/{@link SiteInfo}
  */
-export const sites: SMap<SiteInfo> = siteJson as any
+export const sites: Record<string, SiteInfo> = siteJson
 
 /**
  * Custom error type for when the boorus error or for user-side error, not my code (probably)
- * <p>The name of the error is 'BooruError'
+ *
+ * The name of the error is `BooruError`
+ *
  * @type {Error}
  */
 export class BooruError extends Error {
-  constructor(...args: any) {
-    super(...(args[0] instanceof Error ? [args[0].message] : args))
+  constructor(message: Error | string | undefined) {
+    super(message instanceof Error ? message.message : message)
 
-    if (args[0] instanceof Error) {
-      this.stack = args[0].stack
+    if (message instanceof Error) {
+      this.stack = message.stack
     } else {
       Error.captureStackTrace(this, BooruError)
     }
@@ -50,11 +47,14 @@ export class BooruError extends Error {
   }
 }
 
+export const VERSION: string = '2.4.1'
+
 /**
  * The user-agent to use for searches
+ *
  * @private
  */
-export const userAgent: string = `booru (https://github.com/AtlasTheBot/booru)`
+export const userAgent: string = `booru v${VERSION} (https://github.com/AtlasTheBot/booru)`
 
 /**
  * Expands tags based on a simple map, used for gelbooru/safebooru/etc compat :(
@@ -63,7 +63,7 @@ export const userAgent: string = `booru (https://github.com/AtlasTheBot/booru)`
  * @param {String[]} tags The tags to expand
  */
 function expandTags(tags: string[]): string[] {
-  return tags.map(v => {
+  return tags.map((v) => {
     const ex = expandedTags[v.toLowerCase()]
     return encodeURI(ex ? ex : v)
   })
@@ -79,11 +79,19 @@ function expandTags(tags: string[]): string[] {
  * @param {number} [limit=100] The limit for images to return
  * @param {number} [page=0] The page to get
  */
-export function searchURI(site: Site, tags: string[] = [], limit: number = 100, page: number)
-                        : string {
-  // tslint:disable-next-line:prefer-template
-  return `http${site.insecure ? '' : 's'}://${site.domain}${site.api.search}`
-    + `${site.tagQuery}=${expandTags(tags).join('+')}&limit=${limit}&${site.paginate}=${page}`
+export function searchURI(
+  site: Site,
+  tags: string[] = [],
+  limit: number = 100,
+  page: number,
+): string {
+  // eslint-disable-next-line prefer-template
+  return (
+    `http${site.insecure ? '' : 's'}://${site.domain}${site.api.search}` +
+    `${site.tagQuery}=${expandTags(tags).join('+')}&limit=${limit}&${
+      site.paginate
+    }=${page}`
+  )
 }
 
 /**
@@ -93,8 +101,11 @@ export function searchURI(site: Site, tags: string[] = [], limit: number = 100, 
  * @private
  */
 export const defaultOptions: RequestInit = {
+  // Disable conventions because we're dealing with http headers
   headers: {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     Accept: 'application/json, application/xml;q=0.9, */*;q=0.8',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     'User-Agent': userAgent,
   },
 }

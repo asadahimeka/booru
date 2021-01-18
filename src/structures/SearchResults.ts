@@ -128,7 +128,7 @@ const prototypeKeys: string[] = Reflect
 for (const p of prototypeKeys) {
   if (typeof Array.prototype[p as any] === 'function') {
     const proxy = function(this: SearchResults, ...args: any[]) {
-      // tslint:disable-next-line: ban-types
+      // eslint-disable-next-line @typescript-eslint/ban-types
       return (this.posts[p as any] as unknown as Function)(...args)
     }
 

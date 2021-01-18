@@ -1,6 +1,6 @@
 {
   "name": "booru",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Search (and do other things) on a bunch of different boorus!",
   "author": "AtlasTheBot (https://github.com/AtlasTheBot/)",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "lint": "npx tslint --fix -p . -c ./tslint.json ./src/**/*.ts",
     "clean": "npx rimraf ./dist",
     "prebuild": "npm run-script clean && npm run-script lint",
-    "build": "npx typescript --sourceMap false",
+    "build": "npx typescript --sourceMap",
     "build-dev": "npx typescript --sourceMap",
     "postbuild": "node ./minify.js",
     "prepublishOnly": "npm run-script build"
@@ -44,24 +44,35 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "fast-xml-parser": "^3.17.4",
+    "fast-xml-parser": "^3.17.6",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.3",
+    "@babel/core": "^7.12.10",
     "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.12.1",
-    "@babel/preset-typescript": "^7.12.1",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^14.14.6",
-    "@types/node-fetch": "^2.5.7",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-typescript": "^7.12.7",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.21",
+    "@types/node-fetch": "^2.5.8",
+    "@typescript-eslint/eslint-plugin": "^4.13.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^4.13.0",
+    "@typescript-eslint/parser": "^4.13.0",
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.3",
+    "eslint-plugin-jsdoc": "^31.0.7",
+    "eslint-plugin-no-null": "^1.0.2",
+    "eslint-plugin-prettier": "^3.3.1",
     "jest": "^26.6.3",
+    "prettier": "2.2.1",
     "rimraf": "^3.0.2",
-    "terser": "^5.3.8",
+    "terser": "^5.5.1",
     "tslint": "^6.1.3",
-    "typedoc": "^0.19.2",
-    "typedoc-plugin-external-module-name": "^4.0.3",
-    "typescript": "^4.0.5"
+    "typedoc": "^0.20.16",
+    "typedoc-plugin-external-module-name": "^4.0.6",
+    "typescript": "^4.1.3"
   },
   "files": [
     "dist/"

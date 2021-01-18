@@ -39,7 +39,10 @@ export function resolveSite(domain: string): string | null {
 export async function jsonfy(xml: string): Promise<object[]> {
   if (typeof xml === 'object') return xml
 
-  const data = xml2json(xml, {ignoreAttributes: false, attributeNamePrefix: ''})
+  const data = xml2json(xml, {
+    ignoreAttributes: false,
+    attributeNamePrefix: '',
+  })
 
   if (data.html || data['!doctype']) {
     // Some boorus return HTML error pages instead of JSON responses on errors
@@ -54,14 +57,18 @@ export async function jsonfy(xml: string): Promise<object[]> {
       message.push(page.body.p['#text'])
     }
 
-    throw new BooruError(`The Booru sent back an error: '${message.join(': ')}'`, data.html)
+    throw new BooruError(
+      `The Booru sent back an error: '${message.join(': ')}', HTML: ${
+        data.html
+      }`,
+    )
   }
 
   if (data.posts.post) return data.posts.post
-  if (data.posts.tag) return Array.isArray(data.posts.tag) ? data.posts.tag : [data.posts.tag]
+  if (data.posts.tag)
+    return Array.isArray(data.posts.tag) ? data.posts.tag : [data.posts.tag]
   return []
 }
-
 
 /**
  * Yay fisher-bates
@@ -109,8 +116,10 @@ export function randInt(min: number, max: number): number {
  * @param {String} site The site to resolve
  * @param {Number|String} limit The limit for the amount of images to fetch
  */
-export function validateSearchParams(site: string, limit: number | string)
-                                   : { site: string, limit: number } {
+export function validateSearchParams(
+  site: string,
+  limit: number | string,
+): { site: string; limit: number } {
   const resolvedSite = resolveSite(site)
 
   if (typeof limit !== 'number') {
@@ -125,7 +134,7 @@ export function validateSearchParams(site: string, limit: number | string)
     throw new BooruError('`limit` should be an int')
   }
 
-  return {site: resolvedSite, limit}
+  return { site: resolvedSite, limit }
 }
 
 /**
@@ -137,5 +146,7 @@ export function validateSearchParams(site: string, limit: number | string)
  * @return {String[]} The shared strings between the arrays
  */
 export function compareArrays(arr1: string[], arr2: string[]): string[] {
-  return arr1.filter(e1 => arr2.some(e2 => e1.toLowerCase() === e2.toLowerCase()))
+  return arr1.filter((e1) =>
+    arr2.some((e2) => e1.toLowerCase() === e2.toLowerCase()),
+  )
 }

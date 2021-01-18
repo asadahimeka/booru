@@ -1,5 +1,6 @@
 {
   "e621.net": {
+    "type": "json",
     "domain": "e621.net",
     "aliases": [
       "e6",
@@ -13,6 +14,7 @@
     "random": true
   },
   "e926.net": {
+    "type": "json",
     "domain": "e926.net",
     "aliases": [
       "e9",
@@ -27,6 +29,7 @@
     "defaultTags": ["rating:safe"]
   },
   "hypnohub.net": {
+    "type": "json",
     "domain": "hypnohub.net",
     "aliases": [
       "hh",
@@ -41,6 +44,7 @@
     "random": true
   },
   "danbooru.donmai.us": {
+    "type": "json",
     "domain": "danbooru.donmai.us",
     "aliases": [
       "db",
@@ -55,6 +59,7 @@
     "random": true
   },
   "konachan.com": {
+    "type": "json",
     "domain": "konachan.com",
     "aliases": [
       "kc",
@@ -69,6 +74,7 @@
     "random": true
   },
   "konachan.net": {
+    "type": "json",
     "domain": "konachan.net",
     "aliases": [
       "kn",
@@ -83,6 +89,7 @@
     "random": true
   },
   "yande.re": {
+    "type": "json",
     "domain": "yande.re",
     "aliases": [
       "yd",
@@ -97,6 +104,7 @@
     "random": true
   },
   "gelbooru.com": {
+    "type": "json",
     "domain": "gelbooru.com",
     "aliases": [
       "gb",
@@ -112,6 +120,7 @@
     "random": false
   },
   "rule34.xxx": {
+    "type": "json",
     "domain": "rule34.xxx",
     "aliases": [
       "r34",
@@ -126,6 +135,7 @@
     "random": false
   },
   "safebooru.org": {
+    "type": "json",
     "domain": "safebooru.org",
     "aliases": [
       "sb",
@@ -141,6 +151,7 @@
     "random": false
   },
   "tbib.org": {
+    "type": "json",
     "domain": "tbib.org",
     "aliases": [
       "tb",
@@ -156,6 +167,7 @@
     "random": false
   },
   "xbooru.com": {
+    "type": "json",
     "domain": "xbooru.com",
     "aliases": [
       "xb",
@@ -170,8 +182,8 @@
     "random": false
   },
   "rule34.paheal.net": {
-    "domain": "rule34.paheal.net",
     "type": "xml",
+    "domain": "rule34.paheal.net",
     "aliases": [
       "pa",
       "paheal"
@@ -184,8 +196,8 @@
     "random": false
   },
   "derpibooru.org": {
-    "domain": "derpibooru.org",
     "type": "derpi",
+    "domain": "derpibooru.org",
     "aliases": [
       "dp",
       "derp",
@@ -201,6 +213,7 @@
     "random": "sf=random"
   },
   "realbooru.com": {
+    "type": "json",
     "domain": "realbooru.com",
     "aliases": [
       "rb",
